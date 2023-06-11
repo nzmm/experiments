@@ -3,12 +3,11 @@ import {
     IVirtualListItem,
     IVisibleItem,
     NumericRange,
+    ListItemRenderer,
     VirtualListItemProps,
     VirtualListProps,
-    ListItemRenderer,
     getHeight,
-    getVisible,
-    getVisibleRanges
+    getVisible
 } from './VirtualList.library';
 
 import './virtuallist.css';
@@ -38,7 +37,7 @@ const VirtualList = <T extends IVirtualListItem>({ items, renderer: ItemRenderer
         }
 
         const handleScroll = () => {
-            const [visible, update] = getVisible(
+            const [vis, ir, pr, update] = getVisible(
                 items,
                 indexRange.current,
                 pixelRange.current,
@@ -47,10 +46,9 @@ const VirtualList = <T extends IVirtualListItem>({ items, renderer: ItemRenderer
                 vlist.current!.clientHeight);
 
             if (update) {
-                const [ir, pr] = getVisibleRanges(visible);
                 indexRange.current = ir;
                 pixelRange.current = pr;
-                setVisible(visible);  
+                setVisible(vis); 
             }
 
             scrollTop.current = vlist.current!.scrollTop;

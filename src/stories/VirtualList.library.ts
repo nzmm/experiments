@@ -31,13 +31,13 @@ type VirtualListItemProps = PropsWithChildren & {
     onFocus: (i: number) => void;
 }
 
-type VisibleResult<T extends IVirtualListItem> = [IVisibleItem<T>[], boolean];
+type VisibleResult<T extends IVirtualListItem> = [IVisibleItem<T>[], NumericRange, NumericRange, boolean];
 
 type NumericRange = [number, number];
 
 const getHeight = (data: IVirtualListItem[]) => data.reduce((acc, cur) => acc + cur.height, 0);
 
-const NO_UPDATE: VisibleResult<any> = [[], false];
+const NO_UPDATE: VisibleResult<any> = [[], [0, 0], [0, 0], false];
 
 const getVisibleUpward = <T extends IVirtualListItem>(
     items: T[],
@@ -73,7 +73,9 @@ const getVisibleUpward = <T extends IVirtualListItem>(
         yo += it.height;
     }
 
-    return [visible, true];
+    const [ir, pr] = getVisibleRanges(visible);
+
+    return [visible, ir, pr, true];
 }
 
 const getVisibleDownward = <T extends IVirtualListItem>(
@@ -111,7 +113,9 @@ const getVisibleDownward = <T extends IVirtualListItem>(
         visible.unshift({ i: index, y: yo, data: it });
     }
 
-    return [visible, true];
+    const [ir, pr] = getVisibleRanges(visible);
+
+    return [visible, ir, pr, true];
 }
 
 const getVisible = (
@@ -146,5 +150,5 @@ const getVisibleRanges = (v: IVisibleItem[]): [NumericRange, NumericRange] => {
     return [indexRange, pixelRange];
 }
 
-export { getHeight, getVisible, getVisibleRanges }
+export { getHeight, getVisible }
 export type { NumericRange, VirtualListProps, VirtualListItemProps, ListItemRenderer, IVirtualListItem, IVisibleItem }
