@@ -21,7 +21,7 @@ const VirtualListItem = ({ index, top, height, onFocus, children }: VirtualListI
 }
 
 /**
- * A virtual list component which renders only the visible items.
+ * A list component which renders only the visible items.
  */
 const VirtualList = <T extends IVirtualListItem>({ items, renderer: ItemRenderer }: VirtualListProps<T>) => {
     const vlist = useRef<HTMLDivElement>(null);
@@ -65,6 +65,8 @@ const VirtualList = <T extends IVirtualListItem>({ items, renderer: ItemRenderer
             setHeight(h);
             handleScroll();            
         }
+
+        handleResize();
 
         const resizeObserver = new ResizeObserver((entries) => {
             for (const entry of entries) {
