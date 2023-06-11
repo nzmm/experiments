@@ -1,6 +1,9 @@
 import { PropsWithChildren } from "react";
 
 interface IVirtualListItem {
+  /**
+   * The height of the list item
+   */
   height: number;
 }
 
@@ -63,23 +66,23 @@ const getVisibleUpward = <T extends IVirtualListItem>(
     return NO_UPDATE;
   }
 
-  let yo = pmin;
+  let y = pmin;
   const visible: IVisibleItem<T>[] = [];
 
-  for (let index = imin; index < items.length; index++) {
-    const it = items[index];
+  for (let i = imin; i < items.length; i++) {
+    const data = items[i];
 
-    const above = yo + it.height >= topOffset;
-    if (!above) {
-      yo += it.height;
+    if (y + data.height <= topOffset) {
+      y += data.height;
       continue;
     }
 
-    const beneath = yo <= topExtent;
-    if (!beneath) break;
+    if (y > topExtent) {
+      break;
+    }
 
-    visible.push({ i: index, y: yo, data: it });
-    yo += it.height;
+    visible.push({ i, y, data });
+    y += data.height;
   }
 
   const [ir, pr] = getVisibleRanges(visible);
@@ -102,25 +105,23 @@ const getVisibleDownward = <T extends IVirtualListItem>(
     return NO_UPDATE;
   }
 
-  let yo = pmax;
+  let y = pmax;
   const visible: IVisibleItem<T>[] = [];
 
-  for (let index = imax; index >= 0; index--) {
-    const it = items[index];
+  for (let i = imax; i >= 0; i--) {
+    const data = items[i];
 
-    const above = yo - it.height < topExtent;
-    if (!above) {
-      yo -= it.height;
+    if (y - data.height >= topExtent) {
+      y -= data.height;
       continue;
     }
 
-    const beneath = yo >= topOffset;
-    if (!beneath) {
+    if (y < topOffset) {
       break;
     }
 
-    yo -= it.height;
-    visible.unshift({ i: index, y: yo, data: it });
+    y -= data.height;
+    visible.unshift({ i, y, data });
   }
 
   const [ir, pr] = getVisibleRanges(visible);

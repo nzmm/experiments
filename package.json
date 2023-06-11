@@ -23,6 +23,7 @@
     "preview": "vite preview",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
+    "prettify": "npx prettier --write .",
     "init-msw": "msw init public/"
   },
   "devDependencies": {
