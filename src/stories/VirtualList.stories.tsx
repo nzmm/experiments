@@ -11,6 +11,9 @@ const LI_STYLE = {
   height: "100%",
   width: "100%",
   margin: 0,
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
   borderBottom: "1px dashed #999"
 };
 
@@ -49,7 +52,7 @@ export default {
   }
 };
 
-export const Test = {
+export const Example = {
   args: {
     itemCount: 20,
     variableHeight: false
@@ -58,11 +61,11 @@ export const Test = {
     const items = createItems(args.variableHeight, args.itemCount);
     return (
       <>
-        <h3>VirtualList</h3>
+        <h3>Things above &hellip;</h3>
         <div style={VL_STYLE}>
           <VirtualList items={items} renderer={ListItem} />
         </div>
-        <small>Stuff below</small>
+        <h3>&hellip; and the stuff below.</h3>
       </>
     );
   }
