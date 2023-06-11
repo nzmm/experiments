@@ -5,11 +5,13 @@ import "./spliiter.css";
 const Splitter = ({
   left: Left,
   right: Right,
-  initialX = "50%"
+  initialX = "50%",
+  minWidth = "20%"
 }: {
   left: () => React.ReactElement<unknown>;
   right: () => React.ReactElement<unknown>;
   initialX?: number | string;
+  minWidth?: number | string;
 }) => {
   const splitter = useRef<HTMLDivElement>(null);
   const [dragging, setDragging] = useState<string>("");
@@ -65,7 +67,7 @@ const Splitter = ({
 
   return (
     <div className="splitter" ref={splitter}>
-      <div className="side l" style={{ width: x }}>
+      <div className="side l" style={{ width: x, minWidth }}>
         <Left />
       </div>
 
@@ -73,7 +75,7 @@ const Splitter = ({
         <div className={`handle ${dragging}`} draggable tabIndex={0} />
       </div>
 
-      <div className="side r">
+      <div className="side r" style={{ minWidth }}>
         <Right />
       </div>
     </div>

@@ -15,7 +15,7 @@
 }
 
 .splitter > .separator {
-  width: 2px;
+  width: 1px;
   height: 100%;
   position: relative;
   background-color: black;
@@ -25,10 +25,11 @@
   position: absolute;
   top: 0;
   left: -4px;
-  width: 10px;
+  width: 9px;
   height: 100%;
+  z-index: 10;
   cursor: grab;
-  transition: background-color 0.7s;
+  transition: background-color 0.5s;
 }
 
 .splitter > .separator > .handle:hover,
