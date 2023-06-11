@@ -3,7 +3,12 @@
 const config = {
   stories: ["../src/**/*.mdx", "../src/**/*.stories.@(js|jsx|ts|tsx)"],
   staticDirs: ["../public"],
-  addons: ["@storybook/addon-links", "@storybook/addon-essentials", "@storybook/addon-interactions", "@storybook/addon-mdx-gfm"],
+  addons: [
+    "@storybook/addon-links",
+    "@storybook/addon-essentials",
+    "@storybook/addon-interactions",
+    "@storybook/addon-mdx-gfm"
+  ],
   framework: {
     name: "@storybook/react-vite",
     options: {}
@@ -12,13 +17,13 @@ const config = {
     autodocs: "tag"
   },
   typescript: {
-    reactDocgen: 'react-docgen-typescript',
+    reactDocgen: "react-docgen-typescript",
     reactDocgenTypescriptOptions: {
       compilerOptions: {
         allowSyntheticDefaultImports: false,
-        esModuleInterop: false,
+        esModuleInterop: false
       },
-      propFilter: () => true,
+      propFilter: () => true
     }
   }
 };

@@ -5,10 +5,10 @@ const preview = {
     controls: {
       matchers: {
         color: /(background|color)$/i,
-        date: /Date$/,
-      },
-    },
-  },
+        date: /Date$/
+      }
+    }
+  }
 };
 
 export default preview;

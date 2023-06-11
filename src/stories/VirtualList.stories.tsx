@@ -1,29 +1,49 @@
-import { VirtualList, ListItemRenderer } from './VirtualList';
+import { VirtualList, ListItemRenderer } from "./VirtualList";
 
-const VL_STYLE = { height: '80vh', width: '50vw', maxHeight: '500px', border: '1px solid gray' }
-const LI_STYLE = { height: '100%', width: '100%', margin: 0, borderBottom: '1px dashed #999' }
-
+const VL_STYLE = {
+  height: "80vh",
+  width: "50vw",
+  maxHeight: "500px",
+  border: "1px solid gray"
+};
+const LI_STYLE = {
+  height: "100%",
+  width: "100%",
+  margin: 0,
+  borderBottom: "1px dashed #999"
+};
 
 const createItems = (variableHeight = false, n = 20) => {
   n = isNaN(n) ? 20 : n;
   n = Math.max(1, Math.min(n, 100_000));
-  return Array(n).fill(null).map((_, i) => {
-    return {
+  return Array(n)
+    .fill(null)
+    .map((_, i) => {
+      return {
         label: `an item`,
         index: i,
         height: variableHeight ? Math.floor(60 + Math.random() * 60) : 60
-    }});
-}
+      };
+    });
+};
 
-const ListItem: ListItemRenderer<{ label: string, index: number, height: number }> = ({ label, index }) => {
-  return <div style={LI_STYLE}>{index + 1}. {label}</div>
-} 
+const ListItem: ListItemRenderer<{
+  label: string;
+  index: number;
+  height: number;
+}> = ({ label, index }) => {
+  return (
+    <div style={LI_STYLE}>
+      {index + 1}. {label}
+    </div>
+  );
+};
 
 export default {
-  title: 'React/VirtualList',
+  title: "React/VirtualList",
   component: VirtualList,
-  tags: ['autodocs'],
-  argTypes: {},
+  tags: ["autodocs"],
+  argTypes: {}
 };
 
 export const Test = {
@@ -31,7 +51,7 @@ export const Test = {
     itemCount: 20,
     variableHeight: false
   },
-  render: (args: { variableHeight: boolean, itemCount: number }) => {
+  render: (args: { variableHeight: boolean; itemCount: number }) => {
     const items = createItems(args.variableHeight, args.itemCount);
     return (
       <>
@@ -39,6 +59,7 @@ export const Test = {
         <div style={VL_STYLE}>
           <VirtualList items={items} renderer={ListItem} />
         </div>
-      </>)
+      </>
+    );
   }
 };
