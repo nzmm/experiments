@@ -6,6 +6,7 @@ const VL_STYLE = {
   maxHeight: "500px",
   border: "1px solid gray"
 };
+
 const LI_STYLE = {
   height: "100%",
   width: "100%",
@@ -20,8 +21,7 @@ const createItems = (variableHeight = false, n = 20) => {
     .fill(null)
     .map((_, i) => {
       return {
-        label: `an item`,
-        index: i,
+        label: `item ${i}`,
         height: variableHeight ? Math.floor(60 + Math.random() * 60) : 60
       };
     });
@@ -29,14 +29,9 @@ const createItems = (variableHeight = false, n = 20) => {
 
 const ListItem: ListItemRenderer<{
   label: string;
-  index: number;
   height: number;
-}> = ({ label, index }) => {
-  return (
-    <div style={LI_STYLE}>
-      {index + 1}. {label}
-    </div>
-  );
+}> = ({ label }) => {
+  return <div style={LI_STYLE}>{label}</div>;
 };
 
 export default {
@@ -59,6 +54,7 @@ export const Test = {
         <div style={VL_STYLE}>
           <VirtualList items={items} renderer={ListItem} />
         </div>
+        <small>Stuff below</small>
       </>
     );
   }

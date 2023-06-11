@@ -45,10 +45,10 @@ type VisibleResult<T extends IVirtualListItem> = [
 
 type NumericRange = [number, number];
 
+const NO_UPDATE: VisibleResult<any> = [[], [0, 0], [0, 0], false];
+
 const getHeight = (data: IVirtualListItem[]) =>
   data.reduce((acc, cur) => acc + cur.height, 0);
-
-const NO_UPDATE: VisibleResult<any> = [[], [0, 0], [0, 0], false];
 
 const getVisibleUpward = <T extends IVirtualListItem>(
   items: T[],
