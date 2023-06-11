@@ -14,14 +14,14 @@ const LI_STYLE = {
   borderBottom: "1px dashed #999"
 };
 
-const createItems = (variableHeight = false, n = 20) => {
+const createItems = (variableHeight: boolean, n: number) => {
   n = isNaN(n) ? 20 : n;
-  n = Math.max(1, Math.min(n, 100_000));
+  n = Math.max(0, Math.min(n, 100_000));
   return Array(n)
     .fill(null)
     .map((_, i) => {
       return {
-        label: `item ${i}`,
+        label: `Item ${i + 1}`,
         height: variableHeight ? Math.floor(60 + Math.random() * 60) : 60
       };
     });
@@ -37,8 +37,16 @@ const ListItem: ListItemRenderer<{
 export default {
   title: "React/VirtualList",
   component: VirtualList,
-  tags: ["autodocs"],
-  argTypes: {}
+  argTypes: {
+    itemCount: {
+      control: {
+        type: "number",
+        min: 0,
+        max: 100_000,
+        step: 1
+      }
+    }
+  }
 };
 
 export const Test = {

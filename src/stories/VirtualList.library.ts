@@ -7,11 +7,11 @@ interface IVirtualListItem {
   height: number;
 }
 
-interface IVisibleItem<T extends IVirtualListItem = IVirtualListItem> {
+type VisibleItem<T extends IVirtualListItem = IVirtualListItem> = {
   i: number;
   y: number;
   data: T;
-}
+};
 
 type ListItemRenderer<T extends IVirtualListItem> = (
   props: PropsWithChildren & T
@@ -27,6 +27,16 @@ type VirtualListProps<T extends IVirtualListItem> = {
    * A component to render each list item.
    */
   renderer: ListItemRenderer<T>;
+
+  /**
+   * The x-overflow behaviour.
+   */
+  xOverflow?: "auto" | "scroll" | "hidden";
+
+  /**
+   * The y-overflow behaviour.
+   */
+  yOverflow?: "auto" | "scroll" | "hidden";
 };
 
 type VirtualListItemProps = PropsWithChildren & {
@@ -37,7 +47,7 @@ type VirtualListItemProps = PropsWithChildren & {
 };
 
 type VisibleResult<T extends IVirtualListItem> = [
-  IVisibleItem<T>[],
+  VisibleItem<T>[],
   NumericRange,
   NumericRange,
   boolean
@@ -45,10 +55,22 @@ type VisibleResult<T extends IVirtualListItem> = [
 
 type NumericRange = [number, number];
 
-const NO_UPDATE: VisibleResult<any> = [[], [0, 0], [0, 0], false];
+const SKIP_UPDATE: VisibleResult<any> = [[], [0, 0], [0, 0], false];
+const EMPTY_UPDATE: VisibleResult<any> = [[], [0, 0], [0, 0], true];
 
 const getHeight = (data: IVirtualListItem[]) =>
   data.reduce((acc, cur) => acc + cur.height, 0);
+
+const finalise = <T extends IVirtualListItem>(
+  v: VisibleItem<T>[]
+): VisibleResult<T> => {
+  if (!v.length) {
+    return EMPTY_UPDATE;
+  }
+
+  const [ir, pr] = getVisibleRanges(v);
+  return [v, ir, pr, true];
+};
 
 const getVisibleUpward = <T extends IVirtualListItem>(
   items: T[],
@@ -60,17 +82,23 @@ const getVisibleUpward = <T extends IVirtualListItem>(
   force = false
 ): VisibleResult<T> => {
   const updateRequired =
-    force || pmin + items[imin].height < topOffset || pmax <= topExtent;
+    force ||
+    (items[imin] &&
+      (pmin + items[imin].height < topOffset || pmax <= topExtent));
 
   if (!updateRequired) {
-    return NO_UPDATE;
+    return SKIP_UPDATE;
   }
 
   let y = pmin;
-  const visible: IVisibleItem<T>[] = [];
+  const visible: VisibleItem<T>[] = [];
 
   for (let i = imin; i < items.length; i++) {
     const data = items[i];
+
+    if (!data) {
+      continue;
+    }
 
     if (y + data.height <= topOffset) {
       y += data.height;
@@ -85,9 +113,7 @@ const getVisibleUpward = <T extends IVirtualListItem>(
     y += data.height;
   }
 
-  const [ir, pr] = getVisibleRanges(visible);
-
-  return [visible, ir, pr, true];
+  return finalise(visible);
 };
 
 const getVisibleDownward = <T extends IVirtualListItem>(
@@ -99,17 +125,20 @@ const getVisibleDownward = <T extends IVirtualListItem>(
   topExtent: number
 ): VisibleResult<T> => {
   const updateRequired =
-    topOffset <= pmin || topExtent < pmax - items[imax].height;
+    items[imax] && (topOffset <= pmin || topExtent < pmax - items[imax].height);
 
   if (!updateRequired) {
-    return NO_UPDATE;
+    return SKIP_UPDATE;
   }
 
   let y = pmax;
-  const visible: IVisibleItem<T>[] = [];
+  const visible: VisibleItem<T>[] = [];
 
   for (let i = imax; i >= 0; i--) {
     const data = items[i];
+    if (!data) {
+      continue;
+    }
 
     if (y - data.height >= topExtent) {
       y -= data.height;
@@ -124,9 +153,7 @@ const getVisibleDownward = <T extends IVirtualListItem>(
     visible.unshift({ i, y, data });
   }
 
-  const [ir, pr] = getVisibleRanges(visible);
-
-  return [visible, ir, pr, true];
+  return finalise(visible);
 };
 
 const getVisible = (
@@ -138,7 +165,7 @@ const getVisible = (
   clientHeight: number
 ) => {
   if (!items) {
-    return NO_UPDATE;
+    return SKIP_UPDATE;
   }
 
   const [imin, imax] = indexRange;
@@ -161,7 +188,7 @@ const getVisible = (
       getVisibleDownward(items, imax, pmin, pmax, topOffset, topExtent);
 };
 
-const getVisibleRanges = (v: IVisibleItem[]): [NumericRange, NumericRange] => {
+const getVisibleRanges = (v: VisibleItem[]): [NumericRange, NumericRange] => {
   const min = v[0];
   const max = v[v.length - 1];
   const indexRange: NumericRange = [min.i, max.i];
@@ -176,5 +203,5 @@ export type {
   VirtualListItemProps,
   ListItemRenderer,
   IVirtualListItem,
-  IVisibleItem
+  VisibleItem
 };

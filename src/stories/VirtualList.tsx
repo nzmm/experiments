@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 import {
   IVirtualListItem,
-  IVisibleItem,
   NumericRange,
   ListItemRenderer,
+  VisibleItem,
   VirtualListItemProps,
   VirtualListProps,
   getHeight,
@@ -35,7 +35,9 @@ const VirtualListItem = ({
  */
 const VirtualList = <T extends IVirtualListItem>({
   items,
-  renderer: ItemRenderer
+  renderer: ItemRenderer,
+  xOverflow = "auto",
+  yOverflow = "auto"
 }: VirtualListProps<T>) => {
   const vlist = useRef<HTMLDivElement>(null);
   const scrollTop = useRef<number>(0);
@@ -43,21 +45,25 @@ const VirtualList = <T extends IVirtualListItem>({
   const pixelRange = useRef<NumericRange>([0, 0]);
 
   const [height, setHeight] = useState<number>(0);
-  const [visible, setVisible] = useState<IVisibleItem<T>[]>([]);
+  const [visible, setVisible] = useState<VisibleItem<T>[]>([]);
 
   useEffect(() => {
-    if (vlist.current == null) {
+    if (!vlist.current) {
       return;
     }
 
     const handleScroll = () => {
+      if (!vlist.current) {
+        return;
+      }
+
       const [vis, ir, pr, update] = getVisible(
         items,
         indexRange.current,
         pixelRange.current,
-        vlist.current!.scrollTop,
-        vlist.current!.scrollTop - scrollTop.current,
-        vlist.current!.clientHeight
+        vlist.current.scrollTop,
+        vlist.current.scrollTop - scrollTop.current,
+        vlist.current.clientHeight
       );
 
       if (update) {
@@ -66,16 +72,21 @@ const VirtualList = <T extends IVirtualListItem>({
         setVisible(vis);
       }
 
-      scrollTop.current = vlist.current!.scrollTop;
+      scrollTop.current = vlist.current.scrollTop;
     };
 
     const handleResize = () => {
-      scrollTop.current = vlist.current!.scrollTop;
-      indexRange.current = [0, 0];
-      pixelRange.current = [0, 0];
+      if (!vlist.current) {
+        return;
+      }
 
       const h = getHeight(items);
       setHeight(h);
+
+      scrollTop.current = vlist.current.scrollTop;
+      indexRange.current = [0, items.length];
+      pixelRange.current = [0, h];
+
       handleScroll();
     };
 
@@ -93,7 +104,10 @@ const VirtualList = <T extends IVirtualListItem>({
     resizeObserver.observe(vlist.current);
 
     return () => {
-      if (!vlist.current) return;
+      if (!vlist.current) {
+        return;
+      }
+
       vlist.current.removeEventListener("scroll", handleScroll);
       resizeObserver.unobserve(vlist.current);
     };
@@ -117,7 +131,11 @@ const VirtualList = <T extends IVirtualListItem>({
   );
 
   return (
-    <div tabIndex={0} className="vlist" ref={vlist}>
+    <div
+      tabIndex={0}
+      className={`vlist x-${xOverflow} y-${yOverflow}`}
+      ref={vlist}
+    >
       <ol style={{ height }}>
         {visible.map((v) => (
           <VirtualListItem
