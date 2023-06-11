@@ -11,9 +11,9 @@ const LI_STYLE = {
   height: "100%",
   width: "100%",
   margin: 0,
-  display: 'flex',
-  justifyContent: 'center',
-  alignItems: 'center',
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
   borderBottom: "1px dashed #999"
 };
 
