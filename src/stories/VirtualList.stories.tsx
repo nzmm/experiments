@@ -52,7 +52,7 @@ export default {
   }
 };
 
-export const Example = {
+export const Vertical = {
   args: {
     itemCount: 20,
     variableHeight: false

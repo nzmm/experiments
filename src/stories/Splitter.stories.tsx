@@ -1,9 +1,10 @@
 import { Splitter } from "./Splitter";
 
 const SPLIT_STYLE = { height: 300, border: "1px solid gray", borderRadius: 4 };
+const SIDE_STYLE = { display: 'flex', height: '100%', width: '100%', justifyContent: 'center', alignItems: 'center' }
 
 const Side = ({ label = "" }) => {
-  return <div>{label}</div>;
+  return <div style={SIDE_STYLE}>{label}</div>;
 };
 
 export default {
@@ -45,12 +46,13 @@ export const Nested = {
   render: () => {
     return (
       <div style={SPLIT_STYLE}>
-        <Splitter orientation="vertical">
-          <Splitter orientation="horizontal">
+        <Splitter orientation="vertical" initialPosition="30%">
+          <Splitter orientation="horizontal" initialPosition="30%">
             <Side label="Upper left content" />
             <Side label="Lower left content" />
           </Splitter>
-          <Splitter orientation="horizontal">
+
+          <Splitter orientation="horizontal" initialPosition="60%">
             <Side label="Upper right content" />
             <Side label="Lower right content" />
           </Splitter>
