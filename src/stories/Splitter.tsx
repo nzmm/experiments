@@ -1,6 +1,6 @@
 import { useEffect, useId, useRef, useState } from "react";
-import { getPosition, getStyles, SplitterProps } from "./Spliiter.library";
-import "./spliiter.css";
+import { getPosition, getStyles, SplitterProps } from "./Splitter.library";
+import "./splitter.css";
 
 let dragOwner: string | null = null;
 
