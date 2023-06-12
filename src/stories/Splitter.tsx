@@ -1,21 +1,19 @@
-import { useEffect, useRef, useState } from "react";
-
+import { useEffect, useId, useRef, useState } from "react";
+import { getPosition, getStyles, SplitterProps } from "./Spliiter.library";
 import "./spliiter.css";
 
+let dragOwner: string | null = null;
+
 const Splitter = ({
-  left: Left,
-  right: Right,
-  initialX = "50%",
-  minWidth = "20%"
-}: {
-  left: () => React.ReactElement<unknown>;
-  right: () => React.ReactElement<unknown>;
-  initialX?: number | string;
-  minWidth?: number | string;
-}) => {
+  orientation = "vertical",
+  initialPosition = "50%",
+  minSize = "20%",
+  children
+}: SplitterProps) => {
+  const id = useId();
   const splitter = useRef<HTMLDivElement>(null);
   const [dragging, setDragging] = useState<string>("");
-  const [x, setX] = useState<number | string>(initialX);
+  const [position, setPosition] = useState<number | string>(initialPosition);
 
   useEffect(() => {
     if (!splitter.current) {
@@ -26,29 +24,48 @@ const Splitter = ({
       if (!e.dataTransfer || !splitter.current) {
         return;
       }
+      if (dragOwner) {
+        return;
+      }
+
+      e.stopPropagation();
+      e.dataTransfer?.setDragImage(splitter.current, -99999, -99999);
+      dragOwner = id;
 
       setDragging("dragging");
-      e.dataTransfer?.setDragImage(splitter.current, -99999, -99999);
     };
 
     const handleDragEnd = (e: DragEvent) => {
       if (!splitter.current) {
         return;
       }
+      if (id !== dragOwner) {
+        return;
+      }
 
+      e.stopPropagation();
+      dragOwner = null;
+
+      const pos = getPosition(orientation, e, splitter.current);
+      setPosition(pos);
       setDragging("");
-      setX(e.clientX - splitter.current.offsetLeft);
     };
 
     const handleDragOver = (e: DragEvent) => {
       if (!splitter.current) {
         return;
       }
+      if (id !== dragOwner) {
+        return;
+      }
 
-      setX(e.clientX - splitter.current.offsetLeft);
+      e.stopPropagation();
+
+      const pos = getPosition(orientation, e, splitter.current);
+      setPosition(pos);
     };
 
-    setX(initialX);
+    setPosition(initialPosition);
 
     splitter.current.addEventListener("dragstart", handleDragStart);
     splitter.current.addEventListener("dragend", handleDragEnd);
@@ -63,20 +80,22 @@ const Splitter = ({
       splitter.current.removeEventListener("dragend", handleDragEnd);
       splitter.current.removeEventListener("dragover", handleDragOver);
     };
-  }, [initialX]);
+  }, [initialPosition, id]);
+
+  const [styleA, styleB] = getStyles(orientation, position, minSize);
 
   return (
-    <div className="splitter" ref={splitter}>
-      <div className="side l" style={{ width: x, minWidth }}>
-        <Left />
+    <div className={`split ${orientation}`} ref={splitter}>
+      <div className="side a" style={styleA}>
+        {children[0]}
       </div>
 
       <div className="separator">
         <div className={`handle ${dragging}`} draggable tabIndex={0} />
       </div>
 
-      <div className="side r" style={{ minWidth }}>
-        <Right />
+      <div className="side b" style={styleB}>
+        {children[1]}
       </div>
     </div>
   );
