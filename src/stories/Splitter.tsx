@@ -80,7 +80,7 @@ const Splitter = ({
       splitter.current.removeEventListener("dragend", handleDragEnd);
       splitter.current.removeEventListener("dragover", handleDragOver);
     };
-  }, [initialPosition, id]);
+  }, [initialPosition]);
 
   const [styleA, styleB] = getStyles(orientation, position, minSize);
 
