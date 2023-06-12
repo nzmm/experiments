@@ -1,7 +1,13 @@
 import { Splitter } from "./Splitter";
 
 const SPLIT_STYLE = { height: 300, border: "1px solid gray", borderRadius: 4 };
-const SIDE_STYLE = { display: 'flex', height: '100%', width: '100%', justifyContent: 'center', alignItems: 'center' }
+const SIDE_STYLE = {
+  display: "flex",
+  height: "100%",
+  width: "100%",
+  justifyContent: "center",
+  alignItems: "center"
+};
 
 const Side = ({ label = "" }) => {
   return <div style={SIDE_STYLE}>{label}</div>;

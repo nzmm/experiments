@@ -5,10 +5,10 @@ import "./spliiter.css";
 let dragOwner: string | null = null;
 
 const Splitter = ({
-  orientation = "vertical",
-  initialPosition = "50%",
+  orientation,
+  children,
   minSize = "20%",
-  children
+  initialPosition = "50%"
 }: SplitterProps) => {
   const id = useId();
   const splitter = useRef<HTMLDivElement>(null);
