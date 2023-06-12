@@ -9,8 +9,7 @@ import {
   getHeight,
   getVisible
 } from "./VirtualList.library";
-
-import "./virtuallist.css";
+import "./VirtualList.css";
 
 const VirtualListItem = ({
   index,

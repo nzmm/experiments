@@ -5,7 +5,7 @@ import {
   getStyles,
   SplitterProps
 } from "./Splitter.library";
-import "./splitter.css";
+import "./Splitter.css";
 
 let dragOwner: string | null = null;
 
