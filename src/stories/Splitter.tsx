@@ -1,5 +1,10 @@
 import { useEffect, useId, useRef, useState } from "react";
-import { getPosition, getStyles, SplitterProps } from "./Splitter.library";
+import {
+  CSSDimension,
+  getPosition,
+  getStyles,
+  SplitterProps
+} from "./Splitter.library";
 import "./splitter.css";
 
 let dragOwner: string | null = null;
@@ -13,7 +18,9 @@ const Splitter = ({
   const id = useId();
   const splitter = useRef<HTMLDivElement>(null);
   const [dragging, setDragging] = useState<string>("");
-  const [position, setPosition] = useState<number | string>(initialPosition);
+  const [position, setPosition] = useState<number | CSSDimension>(
+    initialPosition
+  );
 
   useEffect(() => {
     if (!splitter.current) {
@@ -21,10 +28,10 @@ const Splitter = ({
     }
 
     const handleDragStart = (e: DragEvent) => {
-      if (!e.dataTransfer || !splitter.current) {
+      if (dragOwner) {
         return;
       }
-      if (dragOwner) {
+      if (!e.dataTransfer || !splitter.current) {
         return;
       }
 
@@ -46,7 +53,7 @@ const Splitter = ({
       e.stopPropagation();
       dragOwner = null;
 
-      const pos = getPosition(orientation, e, splitter.current);
+      const pos = getPosition(e, orientation, splitter.current);
       setPosition(pos);
       setDragging("");
     };
@@ -61,7 +68,7 @@ const Splitter = ({
 
       e.stopPropagation();
 
-      const pos = getPosition(orientation, e, splitter.current);
+      const pos = getPosition(e, orientation, splitter.current);
       setPosition(pos);
     };
 
