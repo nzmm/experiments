@@ -3,61 +3,61 @@
   height: 100%;
   display: flex;
   position: relative;
-}
 
-.split.vertical {
-  flex-direction: row;
-}
+  &.vertical {
+    flex-direction: row;
 
-.split.horizontal {
-  flex-direction: column;
-}
+    > .side {
+      height: 100%;
+    }
 
-.split.vertical > .side {
-  height: 100%;
-}
+    > .separator {
+      width: 1px;
+      height: 100%;
 
-.split > .side.b {
-  flex-grow: 1;
-}
+      > .handle {
+        top: 0;
+        left: -4px;
+        width: 9px;
+        height: 100%;
+      }
+    }
+  }
 
-.split > .separator {
-  position: relative;
-  background-color: black;
-}
+  &.horizontal {
+    flex-direction: column;
 
-.split.vertical > .separator {
-  width: 1px;
-  height: 100%;
-}
+    > .separator {
+      height: 1px;
+      width: 100%;
 
-.split.horizontal > .separator {
-  height: 1px;
-  width: 100%;
-}
+      > .handle {
+        top: -4px;
+        left: 0;
+        width: 100%;
+        height: 9px;
+      }
+    }
+  }
 
-.split > .separator > .handle {
-  position: absolute;
-  z-index: 10;
-  cursor: grab;
-  transition: background-color 0.5s;
-}
+  > .side.b {
+    flex-grow: 1;
+  }
 
-.split.vertical > .separator > .handle {
-  top: 0;
-  left: -4px;
-  width: 9px;
-  height: 100%;
-}
+  > .separator {
+    position: relative;
+    background-color: gray;
 
-.split.horizontal > .separator > .handle {
-  top: -4px;
-  left: 0;
-  width: 100%;
-  height: 9px;
-}
+    > .handle {
+      position: absolute;
+      z-index: 10;
+      cursor: grab;
+      transition: background-color 0.5s;
 
-.split > .separator > .handle:hover,
-.split > .separator > .handle.dragging {
-  background-color: rgba(255, 0, 0, 0.5);
+      &:hover,
+      &.dragging {
+        background-color: rgba(255, 0, 0, 0.5);
+      }
+    }
+  }
 }
