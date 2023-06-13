@@ -27,6 +27,13 @@ type SplitterProps = {
   children: [React.ReactNode, React.ReactNode];
 };
 
+const SUPPORTED_KEYS = new Set([
+  "ArrowUp",
+  "ArrowDown",
+  "ArrowLeft",
+  "ArrowRight"
+]);
+
 const getPosition = (
   e: DragEvent,
   orientation: Orientation,
@@ -47,5 +54,5 @@ const getStyles = (
     : [{ height: position, minHeight: minSize }, { minHeight: minSize }];
 };
 
-export { getPosition, getStyles };
+export { SUPPORTED_KEYS, getPosition, getStyles };
 export type { CSSDimension, SplitterProps };

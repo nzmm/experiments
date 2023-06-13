@@ -3,7 +3,8 @@ import {
   CSSDimension,
   getPosition,
   getStyles,
-  SplitterProps
+  SplitterProps,
+  SUPPORTED_KEYS
 } from "./Splitter.library";
 import "./Splitter.css";
 
@@ -17,13 +18,14 @@ const Splitter = ({
 }: SplitterProps) => {
   const id = useId();
   const splitter = useRef<HTMLDivElement>(null);
+  const handle = useRef<HTMLDivElement>(null);
   const [dragging, setDragging] = useState<string>("");
   const [position, setPosition] = useState<number | CSSDimension>(
     initialPosition
   );
 
   useEffect(() => {
-    if (!splitter.current) {
+    if (!splitter.current || !handle.current) {
       return;
     }
 
@@ -72,20 +74,69 @@ const Splitter = ({
       setPosition(pos);
     };
 
+    const handleKeyPress = (e: KeyboardEvent) => {
+      const parent = handle.current?.parentElement;
+      if (!parent || !SUPPORTED_KEYS.has(e.key)) {
+        return;
+      }
+
+      e.stopPropagation();
+      const cs = getComputedStyle(parent);
+
+      switch (`${orientation}.${e.key}`) {
+        case "vertical.ArrowRight":
+          setPosition(
+            parent.offsetLeft -
+              parseFloat(cs.paddingLeft) -
+              parseFloat(cs.borderLeftWidth) +
+              5
+          );
+          break;
+        case "vertical.ArrowLeft":
+          setPosition(
+            parent.offsetLeft -
+              parseFloat(cs.paddingLeft) -
+              parseFloat(cs.borderLeftWidth) -
+              5
+          );
+          break;
+        case "horizontal.ArrowUp":
+          setPosition(
+            parent.offsetTop -
+              parseFloat(cs.paddingTop) -
+              parseFloat(cs.borderTopWidth) -
+              5
+          );
+          break;
+        case "horizontal.ArrowDown":
+          setPosition(
+            parent.offsetTop -
+              parseFloat(cs.paddingTop) -
+              parseFloat(cs.borderTopWidth) +
+              5
+          );
+          break;
+        default:
+          return;
+      }
+    };
+
     setPosition(initialPosition);
 
     splitter.current.addEventListener("dragstart", handleDragStart);
     splitter.current.addEventListener("dragend", handleDragEnd);
     splitter.current.addEventListener("dragover", handleDragOver);
+    handle.current.addEventListener("keydown", handleKeyPress);
 
     return () => {
-      if (!splitter.current) {
+      if (!splitter.current || !handle.current) {
         return;
       }
 
       splitter.current.removeEventListener("dragstart", handleDragStart);
       splitter.current.removeEventListener("dragend", handleDragEnd);
       splitter.current.removeEventListener("dragover", handleDragOver);
+      handle.current.removeEventListener("keypress", handleKeyPress);
     };
   }, [initialPosition]);
 
@@ -98,7 +149,12 @@ const Splitter = ({
       </div>
 
       <div className="separator">
-        <div className={`handle ${dragging}`} draggable tabIndex={0} />
+        <div
+          className={`handle ${dragging}`}
+          draggable
+          tabIndex={0}
+          ref={handle}
+        />
       </div>
 
       <div className="side b" style={styleB}>
