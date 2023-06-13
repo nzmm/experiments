@@ -6,7 +6,7 @@ type Orientation = "vertical" | "horizontal";
 
 type SplitterProps = {
   /**
-   * The orientation of the splitter handle.
+   * The orientation of the split panels.
    */
   orientation: Orientation;
 
@@ -21,8 +21,8 @@ type SplitterProps = {
   minSize?: number | CSSDimension;
 
   /**
-   * The component must be supplied with exactly two children.
-   * The first child will occupy `side a` and the second child will occupy `side b`.
+   * The component must be supplied with exactly two children (the panels).
+   * The first child will occupy `panel a` and the second child will occupy `panel b`.
    */
   children: [React.ReactNode, React.ReactNode];
 };
@@ -31,7 +31,10 @@ const SUPPORTED_KEYS = new Set([
   "ArrowUp",
   "ArrowDown",
   "ArrowLeft",
-  "ArrowRight"
+  "ArrowRight",
+  "Home",
+  "End",
+  "Enter"
 ]);
 
 const getPosition = (
@@ -39,7 +42,7 @@ const getPosition = (
   orientation: Orientation,
   splitter: HTMLDivElement
 ) => {
-  return orientation === "vertical"
+  return orientation === "horizontal"
     ? e.clientX - splitter.offsetLeft
     : e.clientY - splitter.offsetTop;
 };
@@ -49,10 +52,30 @@ const getStyles = (
   position: number | CSSDimension,
   minSize: number | CSSDimension
 ) => {
-  return orientation === "vertical"
+  return orientation === "horizontal"
     ? [{ width: position, minWidth: minSize }, { minWidth: minSize }]
     : [{ height: position, minHeight: minSize }, { minHeight: minSize }];
 };
 
-export { SUPPORTED_KEYS, getPosition, getStyles };
+const shiftX = (parent: HTMLElement, step: number) => {
+  const cs = getComputedStyle(parent);
+  return (
+    parent.offsetLeft -
+    parseFloat(cs.paddingLeft) -
+    parseFloat(cs.borderLeftWidth) +
+    step
+  );
+};
+
+const shiftY = (parent: HTMLElement, step: number) => {
+  const cs = getComputedStyle(parent);
+  return (
+    parent.offsetTop -
+    parseFloat(cs.paddingTop) -
+    parseFloat(cs.borderTopWidth) +
+    step
+  );
+};
+
+export { SUPPORTED_KEYS, getPosition, getStyles, shiftX, shiftY };
 export type { CSSDimension, SplitterProps };

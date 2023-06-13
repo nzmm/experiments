@@ -3,6 +3,8 @@ import {
   CSSDimension,
   getPosition,
   getStyles,
+  shiftX,
+  shiftY,
   SplitterProps,
   SUPPORTED_KEYS
 } from "./Splitter.library";
@@ -74,6 +76,10 @@ const Splitter = ({
       setPosition(pos);
     };
 
+    /**
+     * Key navigation supports some but not all of the recommended accessible key navigations.
+     * https://www.w3.org/WAI/ARIA/apg/patterns/windowsplitter/
+     */
     const handleKeyPress = (e: KeyboardEvent) => {
       const parent = handle.current?.parentElement;
       if (!parent || !SUPPORTED_KEYS.has(e.key)) {
@@ -81,41 +87,43 @@ const Splitter = ({
       }
 
       e.stopPropagation();
-      const cs = getComputedStyle(parent);
 
       switch (`${orientation}.${e.key}`) {
-        case "vertical.ArrowRight":
-          setPosition(
-            parent.offsetLeft -
-              parseFloat(cs.paddingLeft) -
-              parseFloat(cs.borderLeftWidth) +
-              5
-          );
+        case "horizontal.ArrowRight": {
+          const pos = shiftX(parent, 5);
+          setPosition(pos);
           break;
-        case "vertical.ArrowLeft":
-          setPosition(
-            parent.offsetLeft -
-              parseFloat(cs.paddingLeft) -
-              parseFloat(cs.borderLeftWidth) -
-              5
-          );
+        }
+        case "horizontal.ArrowLeft": {
+          const pos = shiftX(parent, -5);
+          setPosition(pos);
           break;
-        case "horizontal.ArrowUp":
-          setPosition(
-            parent.offsetTop -
-              parseFloat(cs.paddingTop) -
-              parseFloat(cs.borderTopWidth) -
-              5
-          );
+        }
+        case "vertical.ArrowUp": {
+          const pos = shiftY(parent, -5);
+          setPosition(pos);
           break;
-        case "horizontal.ArrowDown":
-          setPosition(
-            parent.offsetTop -
-              parseFloat(cs.paddingTop) -
-              parseFloat(cs.borderTopWidth) +
-              5
-          );
+        }
+        case "vertical.ArrowDown": {
+          const pos = shiftY(parent, 5);
+          setPosition(pos);
           break;
+        }
+        case "horizontal.Home":
+        case "vertical.Home": {
+          setPosition(0);
+          break;
+        }
+        case "horizontal.End":
+        case "vertical.End": {
+          setPosition("100%");
+          break;
+        }
+        case "horizontal.Enter":
+        case "vertical.Enter": {
+          setPosition(initialPosition);
+          break;
+        }
         default:
           return;
       }
@@ -144,7 +152,7 @@ const Splitter = ({
 
   return (
     <div className={`split ${orientation}`} ref={splitter}>
-      <div className="side a" style={styleA}>
+      <div className="panel a" style={styleA}>
         {children[0]}
       </div>
 
@@ -153,11 +161,15 @@ const Splitter = ({
           className={`handle ${dragging}`}
           draggable
           tabIndex={0}
+          role="separator"
+          aria-valuemin={0}
+          aria-valuemax={100}
+          aria-valuenow={position as number}
           ref={handle}
         />
       </div>
 
-      <div className="side b" style={styleB}>
+      <div className="panel b" style={styleB}>
         {children[1]}
       </div>
     </div>

@@ -4,10 +4,10 @@
   display: flex;
   position: relative;
 
-  &.vertical {
+  &.horizontal {
     flex-direction: row;
 
-    > .side {
+    > .panel {
       height: 100%;
     }
 
@@ -24,7 +24,7 @@
     }
   }
 
-  &.horizontal {
+  &.vertical {
     flex-direction: column;
 
     > .separator {
@@ -40,7 +40,7 @@
     }
   }
 
-  > .side.b {
+  > .panel.b {
     flex-grow: 1;
   }
 
@@ -55,6 +55,7 @@
       transition: background-color 0.5s;
 
       &:hover,
+      &:focus,
       &.dragging {
         background-color: rgba(255, 0, 0, 0.5);
       }

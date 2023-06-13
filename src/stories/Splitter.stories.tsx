@@ -9,7 +9,7 @@ const SIDE_STYLE = {
   alignItems: "center"
 };
 
-const Side = ({ label = "" }) => {
+const Panel = ({ label = "" }) => {
   return <div style={SIDE_STYLE}>{label}</div>;
 };
 
@@ -25,8 +25,8 @@ export const Vertical = {
     return (
       <div style={SPLIT_STYLE}>
         <Splitter orientation="vertical">
-          <Side label="Left content" />
-          <Side label="Right content" />
+          <Panel label="Upper panel" />
+          <Panel label="Lower panel" />
         </Splitter>
       </div>
     );
@@ -39,8 +39,8 @@ export const Horizontal = {
     return (
       <div style={SPLIT_STYLE}>
         <Splitter orientation="horizontal">
-          <Side label="Upper content" />
-          <Side label="Lower content" />
+          <Panel label="Left panel" />
+          <Panel label="Right panel" />
         </Splitter>
       </div>
     );
@@ -54,13 +54,13 @@ export const Nested = {
       <div style={SPLIT_STYLE}>
         <Splitter orientation="vertical" initialPosition="30%">
           <Splitter orientation="horizontal" initialPosition="30%">
-            <Side label="Upper left content" />
-            <Side label="Lower left content" />
+            <Panel label="Upper left panel" />
+            <Panel label="Upper right panel" />
           </Splitter>
 
           <Splitter orientation="horizontal" initialPosition="60%">
-            <Side label="Upper right content" />
-            <Side label="Lower right content" />
+            <Panel label="Lower left panel" />
+            <Panel label="Lower right panel" />
           </Splitter>
         </Splitter>
       </div>
