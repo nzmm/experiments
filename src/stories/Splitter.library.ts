@@ -1,6 +1,6 @@
 type Unit = "%" | "px" | "em" | "vw" | "vh";
 
-type CSSDimension = `${number}${Unit}`;
+type CSSDimension = number | `${number}${Unit}`;
 
 type Orientation = "vertical" | "horizontal";
 
@@ -13,12 +13,12 @@ type SplitterProps = {
   /**
    * The initial position of the splitter handle.
    */
-  initialPosition?: number | CSSDimension;
+  initialPosition?: CSSDimension;
 
   /**
    * The smallest size that a child can have.
    */
-  minSize?: number | CSSDimension;
+  minSize?: CSSDimension;
 
   /**
    * The component must be supplied with exactly two children (the panels).
@@ -49,8 +49,8 @@ const getPosition = (
 
 const getStyles = (
   orientation: Orientation,
-  position: number | CSSDimension,
-  minSize: number | CSSDimension
+  position: CSSDimension,
+  minSize: CSSDimension
 ) => {
   return orientation === "horizontal"
     ? [{ width: position, minWidth: minSize }, { minWidth: minSize }]

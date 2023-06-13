@@ -22,9 +22,7 @@ const Splitter = ({
   const splitter = useRef<HTMLDivElement>(null);
   const handle = useRef<HTMLDivElement>(null);
   const [dragging, setDragging] = useState<string>("");
-  const [position, setPosition] = useState<number | CSSDimension>(
-    initialPosition
-  );
+  const [position, setPosition] = useState<CSSDimension>(initialPosition);
 
   useEffect(() => {
     if (!splitter.current || !handle.current) {
