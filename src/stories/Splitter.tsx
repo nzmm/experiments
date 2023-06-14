@@ -21,6 +21,7 @@ const Splitter = ({
   const id = useId();
   const splitter = useRef<HTMLDivElement>(null);
   const handle = useRef<HTMLDivElement>(null);
+
   const [dragging, setDragging] = useState<string>("");
   const [position, setPosition] = useState<CSSDimension>(initialPosition);
 

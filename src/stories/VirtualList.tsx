@@ -91,7 +91,7 @@ const VirtualList = <T extends IVirtualListItem>({
 
     handleResize();
 
-    const resizeObserver = new ResizeObserver((entries) => {
+    const observer = new ResizeObserver((entries) => {
       for (const entry of entries) {
         if (entry.contentBoxSize) {
           handleResize();
@@ -100,7 +100,7 @@ const VirtualList = <T extends IVirtualListItem>({
     });
 
     vlist.current.addEventListener("scroll", handleScroll);
-    resizeObserver.observe(vlist.current);
+    observer.observe(vlist.current);
 
     return () => {
       if (!vlist.current) {
@@ -108,7 +108,7 @@ const VirtualList = <T extends IVirtualListItem>({
       }
 
       vlist.current.removeEventListener("scroll", handleScroll);
-      resizeObserver.unobserve(vlist.current);
+      observer.unobserve(vlist.current);
     };
   }, [items]);
 
