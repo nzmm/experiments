@@ -27,7 +27,12 @@ export const Resizable = {
           <textarea
             rows={10}
             cols={25}
-            defaultValue="Some interesting text in a popover... 😀 😃 😄 😁 😆 😅 😂 🤣 🥲 🥹 😊 😇 🙂 🙃 😉 😌 😍 🥰 😘 😗 😙 😚 😋 😛 😝 😜 🤪 🤨 🧐 🤓 😎 🥸 🤩 🥳 ... and some emoji's"
+            defaultValue={
+              "Some interesting text in a popover...\n\n" +
+              "😀 😃 😄 😁 😆 😅 😂 🤣 🥲 🥹 😊 😇 🙂 🙃 😉 😌 😍" +
+              "🥰 😘 😗 😙 😚 😋 😛 😝 😜 🤪 🤨 🧐 🤓 😎 🥸 🤩 🥳" +
+              "\n\n... and a bunch of emoji."
+            }
           ></textarea>
         </Popover>
       </div>
@@ -41,7 +46,7 @@ export const Anchored = {
     const anchor = useRef<HTMLButtonElement>(null);
     return (
       <div style={BG_STYLE}>
-        <Popover anchor={anchor} show>
+        <Popover subject={anchor} show>
           Some popover content further explaining things...
         </Popover>
 
@@ -64,11 +69,15 @@ export const Toggle = {
     const anchor = useRef<HTMLButtonElement>(null);
     return (
       <div style={BG_STYLE}>
-        <Popover anchor={anchor} show={show}>
+        <Popover subject={anchor} show={show}>
           Some popover content
         </Popover>
 
-        <button ref={anchor} onClick={() => setShow(!show)}>
+        <button
+          ref={anchor}
+          onClick={() => setShow(!show)}
+          onBlur={() => setShow(false)}
+        >
           Popover toggle
         </button>
       </div>

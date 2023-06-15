@@ -1,4 +1,11 @@
+import React, { ForwardedRef, MutableRefObject } from "react";
+
 type PopoverProps = React.PropsWithChildren & {
+  /**
+   * Optional element id.
+   */
+  id?: string;
+
   /**
    * When true displays the popover.
    */
@@ -38,7 +45,18 @@ type PopoverProps = React.PropsWithChildren & {
   /**
    * Optional ref to an anchor element.
    */
-  anchor?: React.RefObject<HTMLElement>;
+  subject?: React.RefObject<HTMLElement>;
+};
+
+type Refs = ForwardedRef<unknown> | MutableRefObject<unknown> | null;
+
+const refs = (...refs: Refs[]) => {
+  return (el: HTMLElement | null) => {
+    for (const ref of refs) {
+      if (!ref) continue;
+      ref instanceof Function ? ref(el) : (ref.current = el);
+    }
+  };
 };
 
 const getPath = (
@@ -74,13 +92,19 @@ const getContentStyle = (m: number, so: number, ah: number) => {
   };
 };
 
-const getPositionStyle = (el: HTMLElement, width: number, height: number, offset: number, gap = 2) => {
+const getPositionStyle = (
+  el: HTMLElement,
+  width: number,
+  height: number,
+  offset: number,
+  gap = 2
+) => {
   // top center
   return {
     left: el.offsetLeft + (offset + el.offsetWidth - width) / 2,
     top: el.offsetTop - height + offset - gap
-  }
-}
+  };
+};
 
-export { getPath, getContentStyle, getPositionStyle };
+export { refs, getPath, getContentStyle, getPositionStyle };
 export type { PopoverProps };
