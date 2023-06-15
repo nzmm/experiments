@@ -25,8 +25,8 @@ export const Tooltip = {
       <div style={BG_STYLE}>
         <Tip
           id="yay"
-          text="A very elaborate explanation about a thing!"
           as="p"
+          text="A very elaborate explanation about an important thing!"
         >
           Some text with a tooltip to make things clearer (?)
         </Tip>

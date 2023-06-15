@@ -12,6 +12,11 @@ const BG_STYLE = {
   backgroundColor: "#ddd"
 };
 
+const BTN_STYLE = {
+  padding: "10px 15px",
+  borderRadius: 6
+};
+
 export default {
   title: "React/Popover",
   component: Popover,
@@ -75,6 +80,7 @@ export const Toggle = {
 
         <button
           ref={anchor}
+          style={BTN_STYLE}
           onClick={() => setShow(!show)}
           onBlur={() => setShow(false)}
         >
