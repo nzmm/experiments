@@ -1,11 +1,11 @@
 import React, { useLayoutEffect, useMemo, useRef, useState } from "react";
-import { PopoverProps, getContentStyle, getPath } from "./Popover.library";
+import { PopoverProps, getContentStyle, getPath, getPositionStyle } from "./Popover.library";
 import "./Popover.css";
 
 const Popover = ({
   show = false,
-  borderRadius = 10,
-  arrowWidth = 24,
+  borderRadius = 6,
+  arrowWidth = 28,
   arrowHeight = 16,
   arrowOffset = 0.5,
   margin = 15,
@@ -46,30 +46,28 @@ const Popover = ({
       return;
     }
 
-    const handleReposition = (el: HTMLElement) => {
-      const r = el.getBoundingClientRect();
-
-      // top center
-      setPosition({
-        left: el.offsetLeft + (offset + r.width - width) / 2,
-        top: r.y - height + offset - 2
-      });
+    const handleReposition = () => {
+      const el = anchor.current as HTMLElement;
+      const position = getPositionStyle(el, width, height, offset);
+      setPosition(position);
     };
 
     const observer = new ResizeObserver((entries) => {
       for (const entry of entries) {
         if (entry.contentBoxSize) {
-          handleReposition(entry.target as HTMLElement);
+          handleReposition();
         }
       }
     });
 
-    handleReposition(anchor.current);
+    handleReposition();
     observer.observe(anchor.current);
+    observer.observe(document.body);
 
     return () => {
       if (!anchor.current) return;
       observer.unobserve(anchor.current);
+      observer.unobserve(document.body);
     };
   }, [width, height, show, anchor?.current]);
 

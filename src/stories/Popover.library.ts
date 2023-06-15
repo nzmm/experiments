@@ -74,5 +74,13 @@ const getContentStyle = (m: number, so: number, ah: number) => {
   };
 };
 
-export { getPath, getContentStyle };
+const getPositionStyle = (el: HTMLElement, width: number, height: number, offset: number, gap = 2) => {
+  // top center
+  return {
+    left: el.offsetLeft + (offset + el.offsetWidth - width) / 2,
+    top: el.offsetTop - height + offset - gap
+  }
+}
+
+export { getPath, getContentStyle, getPositionStyle };
 export type { PopoverProps };
