@@ -1,5 +1,4 @@
-import { useRef } from "react";
-import { Tooltip as Tip } from "./Tooltip";
+import { Tooltip as Tip } from "../components/Tooltip";
 
 const BG_STYLE = {
   width: "60%",
@@ -24,11 +23,11 @@ export const Tooltip = {
     return (
       <div style={BG_STYLE}>
         <Tip
-          id="yay"
+          id="tip"
           as="p"
           text="A very elaborate explanation about an important thing!"
         >
-          Some text with a tooltip to make things clearer (?)
+          Some text with a tooltip to make things clearer. Just hover me.
         </Tip>
       </div>
     );

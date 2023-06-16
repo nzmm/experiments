@@ -31,7 +31,7 @@ const Tooltip = ({ id, text, children, as = "span" }: TooltipProps) => {
 
   return (
     <>
-      <Popover id={id} show={show} subject={subject} ref={popover}>
+      <Popover id={id} className="tooltip" show={show} subject={subject} ref={popover}>
         {text}
       </Popover>
       <Wrapper ref={subject} aria-describedby={id}>

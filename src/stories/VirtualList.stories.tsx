@@ -1,4 +1,4 @@
-import { VirtualList, ListItemRenderer } from "./VirtualList";
+import { VirtualList, ListItemRenderer } from "../components/VirtualList";
 
 const VL_STYLE = {
   height: "80vh",

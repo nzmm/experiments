@@ -1,4 +1,4 @@
-import { Splitter } from "./Splitter";
+import { Splitter } from "../components/Splitter";
 
 const SPLIT_STYLE = { height: 300, border: "1px solid gray", borderRadius: 4 };
 const SIDE_STYLE = {

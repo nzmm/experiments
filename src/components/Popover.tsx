@@ -4,7 +4,6 @@ import {
   PopoverProps,
   refs,
   getPath,
-  getContentStyle,
   getPositionStyle
 } from "./Popover.library";
 
@@ -14,6 +13,7 @@ const Popover = forwardRef<unknown, PopoverProps>(
   (
     {
       show = false,
+      orientation = "north",
       borderRadius = 6,
       arrowWidth = 20,
       arrowHeight = 10,
@@ -22,7 +22,8 @@ const Popover = forwardRef<unknown, PopoverProps>(
       offset = 8,
       id,
       subject,
-      children
+      children,
+      className
     },
     ref
   ) => {
@@ -82,10 +83,11 @@ const Popover = forwardRef<unknown, PopoverProps>(
         observer.unobserve(subject.current);
         observer.unobserve(document.body);
       };
-    }, [show, width, height, subject?.current]);
+    }, [show, subject, width, height]);
 
-    const contentStyle = getContentStyle(margin, offset, arrowHeight);
-    const d = getPath(
+    const [d, contentStyle] = getPath(
+      orientation,
+      margin,
       offset,
       offset,
       width - offset,
@@ -100,7 +102,7 @@ const Popover = forwardRef<unknown, PopoverProps>(
       <div
         id={id}
         ref={refs(ref, popover)}
-        className={`popover ${subject?.current ? "anchored" : ""}`}
+        className={`popover ${className || ""} ${subject?.current ? "anchored" : ""}`}
         style={position}
       >
         {show ? (
