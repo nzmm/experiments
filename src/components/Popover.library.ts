@@ -79,6 +79,10 @@ const refs = (...refs: Refs[]) => {
 };
 
 const CLEAN_STRING_REGEX = /[\r\n]+|^\s+|\s+$|(\s)\s+/gm;
+
+/**
+ * Removes extraneous whitespace and newlines from a string. 
+ */
 const compress = (s: string) => s.replace(CLEAN_STRING_REGEX, "$1");
 
 const getPositionStyle = (
@@ -104,6 +108,9 @@ const getPositionStyle = (
   }
 };
 
+/**
+ * Returns memoised svg path and margin styles 
+ */
 const getPath = (
   orientation: Orientaion,
   m: number,
@@ -165,7 +172,7 @@ const getPath = (
           }
         ];
     }
-  }, [orientation, m, x, y, w, h, br, aw, ah]);
+  }, [orientation, m, x, y, w, h, br, aw, ah, po]);
 };
 
 export { refs, getPath, getPositionStyle };
