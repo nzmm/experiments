@@ -1,5 +1,6 @@
 import { useRef, useState } from "react";
 import { Popover } from "../components/Popover";
+import { PopoverProps } from "../components/Popover.library";
 
 const BG_STYLE = {
   width: "60%",
@@ -20,7 +21,18 @@ const BTN_STYLE = {
 export default {
   title: "React/Popover",
   component: Popover,
-  argTypes: {}
+  argTypes: {
+    ref: {
+      table: {
+        disable: true
+      }
+    },
+    key: {
+      table: {
+        disable: true
+      }
+    }
+  }
 };
 
 export const Resizable = {
@@ -52,6 +64,30 @@ export const Anchored = {
     return (
       <div style={BG_STYLE}>
         <Popover subject={anchor} show>
+          Some popover content further explaining things...
+        </Popover>
+
+        <div>
+          A span element to{" "}
+          <span ref={anchor}>
+            <u>anchor things</u>
+          </span>{" "}
+          by.
+        </div>
+      </div>
+    );
+  }
+};
+
+export const Orientation = {
+  args: {
+    orientation: 'south'
+  },
+  render: (args: Partial<PopoverProps>) => {
+    const anchor = useRef<HTMLButtonElement>(null);
+    return (
+      <div style={BG_STYLE}>
+        <Popover subject={anchor} orientation={args.orientation} show>
           Some popover content further explaining things...
         </Popover>
 

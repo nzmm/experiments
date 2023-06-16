@@ -62,7 +62,13 @@ const Popover = forwardRef<unknown, PopoverProps>(
 
       const handleReposition = () => {
         const el = subject.current as HTMLElement;
-        const position = getPositionStyle(el, width, height, offset);
+        const position = getPositionStyle(
+          el,
+          orientation,
+          width,
+          height,
+          offset
+        );
         setPosition(position);
       };
 
@@ -83,7 +89,7 @@ const Popover = forwardRef<unknown, PopoverProps>(
         observer.unobserve(subject.current);
         observer.unobserve(document.body);
       };
-    }, [show, subject, width, height]);
+    }, [show, subject, orientation, width, height]);
 
     const [d, contentStyle] = getPath(
       orientation,
@@ -102,7 +108,9 @@ const Popover = forwardRef<unknown, PopoverProps>(
       <div
         id={id}
         ref={refs(ref, popover)}
-        className={`popover ${className || ""} ${subject?.current ? "anchored" : ""}`}
+        className={`popover ${className || ""} ${
+          subject?.current ? "anchored" : ""
+        }`}
         style={position}
       >
         {show ? (

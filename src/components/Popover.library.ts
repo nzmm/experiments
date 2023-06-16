@@ -78,22 +78,31 @@ const refs = (...refs: Refs[]) => {
   };
 };
 
+const CLEAN_STRING_REGEX = /[\r\n]+|^\s+|\s+$|(\s)\s+/gm;
+const compress = (s: string) => s.replace(CLEAN_STRING_REGEX, "$1");
+
 const getPositionStyle = (
   el: HTMLElement,
+  orientation: Orientaion,
   width: number,
   height: number,
   offset: number,
   gap = 2
 ) => {
-  // top center
-  return {
-    left: el.offsetLeft + (offset + el.offsetWidth - width) / 2,
-    top: el.offsetTop - height + offset - gap
-  };
+  switch (orientation) {
+    case "north":
+    default:
+      return {
+        left: el.offsetLeft + (offset + el.offsetWidth - width) / 2,
+        top: el.offsetTop - height + offset - gap
+      };
+    case "south":
+      return {
+        left: el.offsetLeft + (offset + el.offsetWidth - width) / 2,
+        top: el.offsetTop + el.offsetHeight - offset + gap
+      };
+  }
 };
-
-const CLEAN_STRING_REGEX = /[\r\n]+|^\s+|\s+$|(\s)\s+/gm;
-const compress = (s: string) => s.replace(CLEAN_STRING_REGEX, "$1");
 
 const getPath = (
   orientation: Orientaion,
@@ -110,26 +119,6 @@ const getPath = (
 ): PathResult => {
   return useMemo(() => {
     switch (orientation) {
-      case "south":
-        return [
-          compress(`
-            M${x + po} ${y + br}
-            Q${x + po} ${y + po} ${br + x} ${po + y}
-            H${w - br - po}
-            Q${w - po} ${y + po} ${w - po} ${y + br}
-            V${h - br - ah - po}
-            Q${w - po} ${h - ah - po} ${w - br - po} ${h - ah - po}
-            H${(w + x) * ao + aw / 2 - po}
-            L${(w + x) * ao} ${h - po}
-            L${(w + x) * ao - aw / 2 + po} ${h - ah - po}
-            H${x + br + po}
-            Q${x + po} ${h - ah - po} ${x + po} ${h - ah - br - po}
-            Z`),
-          {
-            margin: m + x,
-            marginTop: ah + m + x
-          }
-        ];
       case "north":
       default:
         return [
@@ -147,8 +136,32 @@ const getPath = (
             Q${x + po} ${h - ah - po} ${x + po} ${h - ah - br - po}
             Z`),
           {
-            margin: m + x,
-            marginBottom: ah + m + x
+            marginBottom: ah + m + x,
+            marginTop: m + x,
+            marginLeft: m + x,
+            marginRight: m + x,
+          }
+        ];
+      case "south":
+        return [
+          compress(`
+            M${x + po} ${y + br + ah + po}
+            Q${x + po} ${y + ah + po} ${br + x} ${y + ah + po}
+            H${(w + x) * ao - aw / 2 + po}
+            L${(w + x) * ao} ${ah + po}
+            L${(w + x) * ao + aw / 2} ${y + ah + po}
+            H${w - br - po}
+            Q${w - po} ${y + ah + po} ${w - po} ${y + ah + br}
+            V${h - br - po}
+            Q${w - po} ${h - po} ${w - br - po} ${h - po}
+            H${x + br + po}
+            Q${x + po} ${h - po} ${x + po} ${h - br - po}
+            Z`),
+          {
+            marginTop: ah + m + x,
+            marginBottom: m + x,
+            marginLeft: m + x,
+            marginRight: m + x,
           }
         ];
     }
