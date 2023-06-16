@@ -77,9 +77,9 @@ const getPath = (
     Q${w - po} ${y + po} ${w - po} ${y + br}
     V${h - br - ah - po}
     Q${w - po} ${h - ah - po} ${w - br - po} ${h - ah - po}
-    H${w * ao + aw / 2 - po}
-    L${w * ao} ${h - po}
-    L${w * ao - aw / 2 + po} ${h - ah}
+    H${(w + x) * ao + aw / 2 - po}
+    L${(w + x) * ao} ${h - po}
+    L${(w + x) * ao - aw / 2 + po} ${h - ah - po}
     H${x + br + po}
     Q${x + po} ${h - ah - po} ${x + po} ${h - ah - br - po}
     Z`;

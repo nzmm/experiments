@@ -15,7 +15,7 @@ const Popover = forwardRef<unknown, PopoverProps>(
     {
       show = false,
       borderRadius = 6,
-      arrowWidth = 18,
+      arrowWidth = 20,
       arrowHeight = 10,
       arrowOffset = 0.5,
       margin = 15,
